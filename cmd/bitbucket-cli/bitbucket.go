@@ -1,20 +1,21 @@
 package main
 
 import (
+	"os"
+	"path"
+
 	"github.com/adrg/xdg"
 	"github.com/alexflint/go-arg"
 	"github.com/sirupsen/logrus"
 	cli "github.com/swisscom/bitbucket-cli/internal"
 	"gopkg.in/yaml.v2"
-	"os"
-	"path"
 )
 
 type Args struct {
 	Debug       *bool           `arg:"-D,--debug"`
 	Username    string          `arg:"-u,--username,env:BITBUCKET_USERNAME"`
 	Password    string          `arg:"-p,--password,env:BITBUCKET_PASSWORD"`
-	AccessToken string          `arg:"-t,--access-token,env:BITBUCKET_ACCESS_TOKEN" help:"A Personal Access Token"`
+	AccessToken string          `arg:"-t,--access-token,env:BBTOKEN" help:"A Personal Access Token"`
 	Url         string          `arg:"-u,--url,env:BITBUCKET_URL" help:"URL to the REST API of Bitbucket, e.g: https://git.example.com/rest"`
 	Config      string          `arg:"-c,--config"`
 	Project     *cli.ProjectCmd `arg:"subcommand:project"`
@@ -35,26 +36,27 @@ func main() {
 	loadConfigIntoArgs(logger)
 
 	if args.Url == "" {
-		logger.Fatalf("please specifiy a Bitbucket URL")
+		logger.Fatalf("Please specify a Bitbucket URL")
 	}
 
 	if args.Username == "" {
-		logger.Fatalf("An username is required")
+		logger.Fatalf("A username is required")
 	}
 
 	var auth cli.Authenticator
-	if args.Password != "" {
-		// Basic Auth
-		auth = cli.BasicAuth{Username: args.Username, Password: args.Password}
-	} else if args.AccessToken != "" {
+	// if args.Password != "" {
+	// 	// Basic Auth
+	// 	auth = cli.BasicAuth{Username: args.Username, Password: args.Password}
+	// } else
+	if args.AccessToken != "" {
 		auth = cli.AccessToken{Username: args.Username, AccessToken: args.AccessToken}
 	} else {
-		logger.Fatalf("either a password or an access token must be provided")
+		logger.Fatalf("An access token must be provided")
 	}
 
 	c, err := cli.NewCLI(auth, args.Url)
 	if err != nil {
-		logger.Fatalf("unable to create CLI: %v", err)
+		logger.Fatalf("Unable to create CLI: %v", err)
 	}
 	c.SetLogger(logger)
 
@@ -85,17 +87,17 @@ func loadConfigIntoArgs(logger *logrus.Logger) {
 		// Load config if specified
 		cfg, err = loadConfig(logger, args.Config)
 		if err != nil {
-			logger.Fatalf("unable to load config: %v", err)
+			logger.Fatalf("Unable to load config: %v", err)
 		}
 	} else {
 		stdCfgFilePath := path.Join(xdg.ConfigHome, "bitbucket-cli", "config.yml")
-		logger.Debugf("loading config from %v", stdCfgFilePath)
+		logger.Debugf("Loading config from %v", stdCfgFilePath)
 		_, err = os.Stat(stdCfgFilePath)
 		if err == nil {
 			// File exists, let's load the config
 			cfg, err = loadConfig(logger, stdCfgFilePath)
 			if err != nil {
-				logger.Fatalf("cannot parse config (%s): %v", stdCfgFilePath, err)
+				logger.Fatalf("Cannot parse config (%s): %v", stdCfgFilePath, err)
 			}
 		}
 	}
@@ -123,14 +125,14 @@ func loadConfig(logger *logrus.Logger, configPath string) (*cli.Config, error) {
 
 	f, err := os.Open(configPath)
 	if err != nil {
-		logger.Fatalf("unable to open config: %v", err)
+		logger.Fatalf("Unable to open config: %v", err)
 	}
 
 	var config cli.Config
 	dec := yaml.NewDecoder(f)
 	err = dec.Decode(&config)
 	if err != nil {
-		logger.Fatalf("unable to parse config: %v", err)
+		logger.Fatalf("Unable to parse config: %v", err)
 	}
 
 	return &config, nil

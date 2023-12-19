@@ -10,9 +10,9 @@ type ProjectCmd struct {
 	Clone *ProjectCloneCmd `arg:"subcommand:clone"`
 }
 
-func (b *BitbucketCLI) RunProjectCmd(cmd *ProjectCmd){
+func (b *BitbucketCLI) RunProjectCmd(cmd *ProjectCmd) {
 	if cmd == nil {
-		b.logger.Fatal("unable to execute command")
+		b.logger.Fatal("Unable to execute command")
 		return
 	}
 

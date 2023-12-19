@@ -22,7 +22,7 @@ func (b *BitbucketCLI) getUrl() *url.URL {
 
 func (b *BitbucketCLI) prepareRequest(req *http.Request) error {
 	if req == nil {
-		return fmt.Errorf("request cannot be nil")
+		return fmt.Errorf("Request cannot be nil")
 	}
 
 	b.auth.AddHeaders(req)

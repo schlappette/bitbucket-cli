@@ -7,30 +7,53 @@ A [Bitbucket Enterprise](https://bitbucket.org/product/enterprise) CLI.
 A docker container for this project can be obtained [here](https://github.com/swisscom/bitbucket-cli/pkgs/container/bitbucket-cli).
  -->
 
-
-### Options
+## Options
+  <!-- ?? How can USERNAME and URL both use -u?? -->
 
 ```plaintext
-  --debug, -D
-  --username USERNAME, -u USERNAME
-  --password PASSWORD, -p PASSWORD
-  --url URL, -u URL
-  --help, -h    display this help and exit
-  
+  -D, --debug                               # 
+  -u, --username {USERNAME}                 # The username to authenticate as
+  -p, --password {PASSWORD}                 # The password to authenticate with
+  -t, --access-token                        # The access token to authenticate with
+  -u, --url {URL}                           # 
+  -c, --config {/path/to/config-file}       #
+  -h, --help                                # Display this help and exit
 ```
+
 Examples
 
 ```bash
 bitbucket-cli [--username USERNAME] [--password PASSWORD] --url URL command args
 ```
 
-### Subcommands
+## Subcommands
 
-#### Project
+- `project`
+  - `-k {KEY}` (required)
+  - `list`
+  - `clone`
+    - `-o,--output-path` (default: `./`)
+    - `-b,--branch` (default: `prod`)
+- `repo`
+  - `branch`
+    - `list`
+    - `compare`
+  - `pr`
+    - `approve`
+    - `create`
+    - `list`
+    - `merge`
+  - `security`
+    - `scan`
+    - `result`
+- `pr`
+  - `list`
 
-##### List
+### project
 
-Lists the repositories in a project
+#### list
+
+Lists all the repositories in a project
 
 ```bash
 $ export BITBUCKET_USERNAME="my-bitbucket-username"
@@ -43,7 +66,7 @@ project-2       https://your-bitbucket-hostname/scm/prjkey/project-2.git
 project-3       https://your-bitbucket-hostname/scm/prjkey/project-3.git
 ```
 
-##### Clone
+#### clone
 
 Clones all the repositories in a project:
 
@@ -66,21 +89,20 @@ drwxr-xr-x  4 dvitali dvitali  140 Jul 21 18:09 project-2
 drwxr-xr-x  3 dvitali dvitali  100 Jul 21 18:09 project-3
 ```
 
-#### Repo
+### repo
 
 This main subcommand requires two arguments:
 
 - `-k KEY`
 - `-n NAME`
 
-These are basically the identifiers for your repository, not including one of the twos in all of the
-subcommands will result in an error.
+These are the identifiers for your repository.  Not including one of the two in all of the subcommands will result in an error.
 
-#### PR
+### pr
 
 This subcommand deals with PRs, please check its subcommands.
 
-##### Create
+#### create
 
 This command, subcommand of (`repo pr`) allows you to create a Pull Request.
 
@@ -112,7 +134,7 @@ Options:
   --help, -h             display this help and exit
 ```
 
-##### List
+#### List
 
 Lists all the PRs for the chosen repository
 
@@ -136,10 +158,9 @@ Options:
   --help, -h             display this help and exit
 ```
 
-#### Security
+### Security
 
-##### Scan
-
+#### Scan
 
 ```plain
 Usage: bitbucket-cli repo security scan

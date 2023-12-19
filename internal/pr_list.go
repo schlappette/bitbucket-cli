@@ -3,15 +3,15 @@ package cli
 import (
 	"encoding/json"
 	"fmt"
-	bitbucket "github.com/gfleury/go-bitbucket-v1"
 	"regexp"
 	"strings"
+
+	bitbucket "github.com/gfleury/go-bitbucket-v1"
 )
 
 type PrListCmd struct {
-	State  string `arg:"-s,--state"`
-	Output string `arg:"-o,--output"`
-
+	State            string `arg:"-s,--state"`
+	Output           string `arg:"-o,--output"`
 	FilterTitleRegex string `arg:"-t,--filter-title"`
 	FilterDescRegex  string `arg:"-d,--filter-desc"`
 }
@@ -24,21 +24,20 @@ func (b *BitbucketCLI) RunPRListCmd(cmd *PrListCmd) {
 	if cmd == nil {
 		return
 	}
-
 	var filterTitle *regexp.Regexp
 	var filterDesc *regexp.Regexp
 	var err error
 	if cmd.FilterTitleRegex != "" {
 		filterTitle, err = regexp.Compile(cmd.FilterTitleRegex)
 		if err != nil {
-			b.logger.Fatalf("unable to compile regex for title filtering: %v", err)
+			b.logger.Fatalf("Unable to compile regex for title filtering: %v", err)
 		}
 	}
 
 	if cmd.FilterDescRegex != "" {
 		filterDesc, err = regexp.Compile(cmd.FilterDescRegex)
 		if err != nil {
-			b.logger.Fatalf("unable to compile regex for description filtering: %v", err)
+			b.logger.Fatalf("Unable to compile regex for description filtering: %v", err)
 		}
 	}
 
@@ -49,13 +48,13 @@ func (b *BitbucketCLI) RunPRListCmd(cmd *PrListCmd) {
 
 	res, err := b.client.DefaultApi.GetPullRequests(options)
 	if err != nil {
-		b.logger.Fatalf("unable to list pull requests: %v", err)
+		b.logger.Fatalf("Unable to list pull requests: %v", err)
 		return
 	}
 
 	pr, err := bitbucket.GetPullRequestsResponse(res)
 	if err != nil {
-		b.logger.Fatalf("unable to parse PRs list: %v", err)
+		b.logger.Fatalf("Unable to parse PRs list: %v", err)
 		return
 	}
 
@@ -66,13 +65,11 @@ func (b *BitbucketCLI) RunPRListCmd(cmd *PrListCmd) {
 				continue
 			}
 		}
-
 		if filterDesc != nil {
 			if !filterDesc.MatchString(v.Description) {
 				continue
 			}
 		}
-
 		filteredPrs = append(filteredPrs, v)
 	}
 
@@ -80,7 +77,7 @@ func (b *BitbucketCLI) RunPRListCmd(cmd *PrListCmd) {
 	case "json":
 		jsonOutput, err := json.Marshal(pr)
 		if err != nil {
-			b.logger.Fatalf("unable to marshal JSON: %v", err)
+			b.logger.Fatalf("Unable to marshal JSON: %v", err)
 		}
 		fmt.Printf("%s", jsonOutput)
 	default:

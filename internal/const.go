@@ -1,3 +1,5 @@
 package cli
 
-const errSpecifySubcommand = "please specify a subcommand"
+const errSpecifySubcommand = "Please specify a subcommand"
+
+// ^ List possible subcommands

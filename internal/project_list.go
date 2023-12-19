@@ -2,9 +2,10 @@ package cli
 
 import (
 	"fmt"
+	"net/url"
+
 	bitbucket "github.com/gfleury/go-bitbucket-v1"
 	"github.com/sirupsen/logrus"
-	"net/url"
 )
 
 type ProjectListCmd struct {
@@ -31,7 +32,7 @@ func (b *BitbucketCLI) projectList(cmd *ProjectCmd) {
 		}
 		pageRepos, err := bitbucket.GetRepositoriesResponse(res)
 		if err != nil {
-			logrus.Fatalf("unable to parse repositories response: %v", err)
+			logrus.Fatalf("Unable to parse repositories response: %v", err)
 		}
 		repositories = append(repositories, pageRepos...)
 		hasNextPage, nextPageStart := bitbucket.HasNextPage(res)

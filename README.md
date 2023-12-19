@@ -2,30 +2,37 @@
 
 A [Bitbucket Enterprise](https://bitbucket.org/product/enterprise) CLI.
 
-```
-Usage: bitbucket-cli [--username USERNAME] [--password PASSWORD] --url URL <command> [<args>]
+<!-- ## Docker container
 
-Options:
+A docker container for this project can be obtained [here](https://github.com/swisscom/bitbucket-cli/pkgs/container/bitbucket-cli).
+ -->
+
+
+### Options
+
+```plaintext
+  --debug, -D
   --username USERNAME, -u USERNAME
   --password PASSWORD, -p PASSWORD
   --url URL, -u URL
-  --help, -h             display this help and exit
+  --help, -h    display this help and exit
+  
+```
+Examples
 
-Commands:
-  project
+```bash
+bitbucket-cli [--username USERNAME] [--password PASSWORD] --url URL command args
 ```
 
-# Docker container
+### Subcommands
 
-A docker container for this project can be obtained [here](https://github.com/swisscom/bitbucket-cli/pkgs/container/bitbucket-cli).
+#### Project
 
-## Project
-
-### List
+##### List
 
 Lists the repositories in a project
 
-```
+```bash
 $ export BITBUCKET_USERNAME="my-bitbucket-username"
 $ read -s BITBUCKET_PASSWORD # Type your password and then press ENTER
 $ export BITBUCKET_PASSWORD
@@ -34,14 +41,13 @@ $ bitbucket-cli --url https://your-bitbucket-hostname/rest project list -k PRJKE
 project-1       https://your-bitbucket-hostname/scm/prjkey/project-1.git
 project-2       https://your-bitbucket-hostname/scm/prjkey/project-2.git
 project-3       https://your-bitbucket-hostname/scm/prjkey/project-3.git
-
 ```
 
-### Clone
+##### Clone
 
 Clones all the repositories in a project:
 
-```
+```bash
 $ export BITBUCKET_USERNAME="my-bitbucket-username"
 $ read -r -s BITBUCKET_PASSWORD # Type your password and then press ENTER
 $ export BITBUCKET_PASSWORD
@@ -60,8 +66,7 @@ drwxr-xr-x  4 dvitali dvitali  140 Jul 21 18:09 project-2
 drwxr-xr-x  3 dvitali dvitali  100 Jul 21 18:09 project-3
 ```
 
-
-## Repo
+#### Repo
 
 This main subcommand requires two arguments:
 
@@ -71,29 +76,24 @@ This main subcommand requires two arguments:
 These are basically the identifiers for your repository, not including one of the twos in all of the
 subcommands will result in an error.
 
-### PR
+#### PR
 
 This subcommand deals with PRs, please check its subcommands.
 
-#### Create
+##### Create
 
 This command, subcommand of (`repo pr`) allows you to create a Pull Request.
 
 Use it as follows:
 
-```
+```plaintext
 bitbucket-cli repo -k "KEY" \
   -n "bitbucket-playground" \
   pr create \
   -t "Some Title" \
   -d "Some Description :thumbsup:" \
   -F "refs/heads/feature/2" -T "refs/heads/master"
-```
 
-
-##### Usage 
-
-```
 Usage: bitbucket-cli repo pr create --title TITLE [--description DESCRIPTION] --from-ref FROM-REF --to-ref TO-REF [--from-key FROM-KEY] [--from-slug FROM-SLUG]
 
 Options:
@@ -112,24 +112,22 @@ Options:
   --help, -h             display this help and exit
 ```
 
-#### List
+##### List
 
 Lists all the PRs for the chosen repository
 
-```
+```bash
 $ bitbucket-cli repo -k KEY -n bitbucket-playground pr list
 Some Title (ID: 2)
 feature 1 (ID: 1)
 ```
 
-```
+```bash
 $ bitbucket-cli repo -k KEY -n bitbucket-playground pr list -s DECLINED
 feature 1 (ID: 1)
 ```
 
-##### Usage
-
-```plain
+```plaintext
 Usage: bitbucket-cli repo pr list [--state STATE]
 
 Options:
@@ -138,11 +136,10 @@ Options:
   --help, -h             display this help and exit
 ```
 
-### Security
+#### Security
 
-#### Scan
+##### Scan
 
-##### Usage
 
 ```plain
 Usage: bitbucket-cli repo security scan
@@ -153,7 +150,6 @@ Options:
 
 ##### Example
 
-```plain
+```bash
 bitbucket-cli repo -k ABC -n some-repo security scan
 ```
-

@@ -2,17 +2,19 @@ package cli
 
 import (
 	"fmt"
+	"net/url"
+	"path/filepath"
+
 	bitbucket "github.com/gfleury/go-bitbucket-v1"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/sirupsen/logrus"
-	"net/url"
-	"path/filepath"
 )
 
 type ProjectCloneCmd struct {
 	Output string `arg:"-o,--output-path" default:"./"`
-	Branch string `arg:"-b,--branch" default:"master"`
+	Branch string `arg:"-b,--branch" default:"prod"`
+	// ? There has to be a way to determine the default branch of a Bitbucket repo via the API
 }
 
 func (b *BitbucketCLI) projectClone(cmd *ProjectCmd) {
